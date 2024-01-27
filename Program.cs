@@ -1,9 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using TradeAssociationWebsite.DB;
+using TradeAssociationWebsite.Repositories;
+using TradeAssociationWebsite.Repositories.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
+//read connection string from appsettings.json
+builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
+
+// SignUp IRepository and Repository
+builder.Services.AddScoped<IUserRepository, UserReporitory>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

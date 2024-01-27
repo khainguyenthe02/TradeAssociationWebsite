@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TradeAssociationWebsite.Models.Admin.User>
+@{
+    ViewData["Title"] = "Chỉnh sửa hội viên";
+}
+
+<form method="post" asp-action="Delete">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Edit Movie</h2>
+			<hr />
+		</div>
+		<div asp-validation-summary="All"></div>
+		<input hidden asp-for="Id" />
+		<div class="mb-3">
+			<label asp-for="UserName"></label>
+			<input disabled asp-for="UserName" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Genre"></label>
+			<input disabled asp-for="Genre" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="ReleaseDate"></label>
+			<input disabled asp-for="ReleaseDate" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Studio"></label>
+			<input disabled asp-for="Studio" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-danger" style="width:150px">Delete</button>
+		<a href="/ListOfUser" class="btn btn-secondary" style="width:150px">
+			Back to Movie List
+		</a>
+
+	</div>
+</form>
