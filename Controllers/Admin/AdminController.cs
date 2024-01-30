@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TradeAssociationWebsite.DB;
+using TradeAssociationWebsite.Models.Admin;
 using TradeAssociationWebsite.Repositories.Interfaces;
 
 namespace TradeAssociationWebsite.Controllers.Admin
@@ -23,5 +24,29 @@ namespace TradeAssociationWebsite.Controllers.Admin
             }
             return BadRequest("Lỗi!");
         }
-    }
+
+		[HttpGet]
+		[Route("DetailsUser/{id:int}")]
+		public IActionResult DetailsUser(int id)
+        {
+            var user = _userRepository.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+		[HttpGet]
+		[Route("UpdateUser/{id:int}")]
+		public IActionResult UpdateUser(int id)
+		{
+			var user = _userRepository.GetById(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			return View(user);
+		}
+
+	}
 }

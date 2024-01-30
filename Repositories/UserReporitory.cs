@@ -40,11 +40,7 @@ namespace TradeAssociationWebsite.Repositories
         public User GetById(int id)
         {
             var user = _context.User.FirstOrDefault(x => x.Id == id);
-            if( user != null)
-            {
-                return user;
-            }
-            return null;
+            return user;
         }
 
         public List<User> Search()

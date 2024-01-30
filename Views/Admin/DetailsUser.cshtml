@@ -1,0 +1,38 @@
+﻿@using TradeAssociationWebsite.Models.Admin;
+@model User
+@{
+    ViewData["Title"] = "Thông tin chi tiết hội viên";
+}
+
+<form method="get" asp-action="Delete">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Chi tiết hội viên</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="UserName">Tài khoản hội viên</label>
+			<input disabled asp-for="UserName" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="FullName">Tên hội viên</label>
+			<input disabled asp-for="FullName" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Birthday">Ngày sinh</label>
+			<input disabled asp-for="Birthday" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Phone">Số điện thoại</label>
+			<input disabled asp-for="Phone" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Address">Địa chỉ</label>
+			<input disabled asp-for="Address" class="form-control" />
+		</div>
+		</div>
+		<button type="submit" class="btn btn-danger" style="width:150px">Xóa</button>
+		<a href="/ListOfUser" class="btn btn-secondary" style="width:150px">
+			Trở lại
+		</a>
+</form>
