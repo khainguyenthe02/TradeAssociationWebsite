@@ -4,7 +4,7 @@
     ViewData["Title"] = "Thông tin chi tiết hội viên";
 }
 
-<form method="get" asp-action="Delete">
+<form method="get">
 	<div class="border p-3 mt-4">
 		<div class="row pb-2">
 			<h2 class="text-primary">Chi tiết hội viên</h2>
@@ -30,9 +30,19 @@
 			<label asp-for="Address">Địa chỉ</label>
 			<input disabled asp-for="Address" class="form-control" />
 		</div>
+		<div class="mb-3">
+			<label asp-for="UserType">Chức vụ</label>
+			<input disabled asp-for="UserType" class="form-control" />
 		</div>
-		<button type="submit" class="btn btn-danger" style="width:150px">Xóa</button>
-		<a href="/ListOfUser" class="btn btn-secondary" style="width:150px">
-			Trở lại
-		</a>
+
+		<div>
+			<label asp-for="UserPicture">Hình ảnh</label>
+			<img src="@Url.Content("~/Images/" + Model.UserPicture)" class="form-control" style="width: 100px; height: 100px" />
+		</div>
+
+		</div>
+	<button type="submit" class="btn btn-danger" style="width:150px">Xóa</button>
+	<a href="/ListOfUser" class="btn btn-secondary" style="width:150px">
+		Trở lại
+	</a>
 </form>

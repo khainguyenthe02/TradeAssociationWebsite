@@ -25,6 +25,8 @@ namespace TradeAssociationWebsite.Controllers.Admin
             return BadRequest("Lỗi!");
         }
 
+
+        // Chi tiết hội viên
 		[HttpGet]
 		[Route("DetailsUser/{id:int}")]
 		public IActionResult DetailsUser(int id)
@@ -36,6 +38,9 @@ namespace TradeAssociationWebsite.Controllers.Admin
             }
             return View(user);
         }
+
+
+        // Cập nhật hội viên
 		[HttpGet]
 		[Route("UpdateUser/{id:int}")]
 		public IActionResult UpdateUser(int id)
@@ -48,5 +53,34 @@ namespace TradeAssociationWebsite.Controllers.Admin
 			return View(user);
 		}
 
+		[HttpGet]
+		[Route("CreateUser")]
+		// Method invoked when pressing the Add New Movie Button
+		public IActionResult CreateUser()
+		{
+			// here we create the model directly inside the view
+			return View("CreateUser");
+		}
+
+		// Thêm mới hội viên
+		[HttpPost]
+		[ValidateAntiForgeryToken] // Prevents Cross Site Request Forgery
+		[Route("CreateUser")]
+		public IActionResult CreateUser(User user, IFormFile userPictureFile)
+        {           
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					_userRepository.Create(user, userPictureFile);
+					return RedirectToAction("ListOfUser");
+				}
+				return View();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }

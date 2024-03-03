@@ -1,0 +1,61 @@
+﻿@using TradeAssociationWebsite.Models.Admin;
+@model User
+@{
+    ViewData["Title"] = "Chỉnh sửa hội viên";
+}
+
+<form method="post" asp-action="Delete">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Chỉnh sửa thông tin hội viên</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="UserName">Tài khoản hội viên</label>
+			<input asp-for="UserName" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="FullName">Tên hội viên</label>
+			<input asp-for="FullName" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Birthday">Ngày sinh</label>
+			<input asp-for="Birthday" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Phone">Số điện thoại</label>
+			<input asp-for="Phone" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Address">Địa chỉ</label>
+			<input asp-for="Address" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="UserType">Chức vụ</label>
+			<input asp-for="UserType" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="UserPicture" name="userPictureFile">Hình ảnh</label>
+			<input id="userPictureInput" name="userPictureFile" type="file" class="form-control" onchange="previewImage(event)" />
+		</div>
+		<div id="imagePreview"></div>
+	</div>
+		<button type="submit" class="btn btn-danger" style="width:150px">Delete</button>
+		<a href="/ListOfUser" class="btn btn-secondary" style="width:150px">
+			Back to Movie List
+		</a>
+</form>
+<script>
+	function previewImage(event) {
+		var input = event.target;
+		var reader = new FileReader();
+
+		reader.onload = function () {
+			var dataURL = reader.result;
+			var imagePreview = document.getElementById('imagePreview');
+			imagePreview.innerHTML = '<img src="' + dataURL + '" style="max-width: 100%; max-height: 200px;" />';
+		};
+
+		reader.readAsDataURL(input.files[0]);
+	}
+</script>

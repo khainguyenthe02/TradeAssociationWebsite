@@ -1,10 +1,11 @@
-﻿using TradeAssociationWebsite.Models.Admin;
+﻿using Microsoft.AspNetCore.Http;
+using TradeAssociationWebsite.Models.Admin;
 
 namespace TradeAssociationWebsite.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        string Create(User user);
+        void Create(User user, IFormFile fromFile);
         List<User> GetAll();
         bool Update(User user);
         bool Delete(int id);

@@ -1,4 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using TradeAssociationWebsite.DB;
 using TradeAssociationWebsite.Repositories;
 using TradeAssociationWebsite.Repositories.Interfaces;
@@ -12,6 +13,13 @@ builder.Services.AddScoped<IUserRepository, UserReporitory>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+// Đọc cấu hình từ appsettings.json
+var configuration = new ConfigurationBuilder()
+	.SetBasePath(Directory.GetCurrentDirectory())
+	.AddJsonFile("appsettings.json")
+	.Build();
 
 var app = builder.Build();
 

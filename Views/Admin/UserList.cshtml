@@ -9,7 +9,7 @@
             <h2 class="text-primary">Danh sách hội viên</h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Movie" asp-action="Create" class="btn btn-primary">
+            <a href="/CreateUser" class="btn btn-primary" >
                 <i class="bi bi-plus-circle"></i> &nbsp; Thêm hội viên
             </a>
         </div>
@@ -53,6 +53,12 @@
                         <div class="w-50 btn-group d-inline" role="group">
                             <a href="/DetailsUser/@user.Id"
                                class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i>Sửa
+                            </a>
+                        </div>
+                        <div class="w-50 btn-group d-inline" role="group">
+                            <a href="/DetailsUser/@user.Id"
+                               class="btn btn-info mx-2">
                                 <i class="bi bi-pencil-square"></i>Chi tiết
                             </a>
                         </div>
