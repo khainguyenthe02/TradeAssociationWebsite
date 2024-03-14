@@ -7,7 +7,7 @@ namespace TradeAssociationWebsite.Repositories.Interfaces
     {
         void Create(User user, IFormFile fromFile);
         List<User> GetAll();
-        bool Update(User user);
+        bool Update(User user, IFormFile fromFile);
         bool Delete(int id);
         User GetById(int id);
         List<User> Search();

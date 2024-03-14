@@ -4,7 +4,7 @@
     ViewData["Title"] = "Thông tin chi tiết hội viên";
 }
 
-<form method="get">
+<form method="post" asp-action="DeleteUser" asp-controller="Admin" onsubmit="return confirmDeleteUser()">
 	<div class="border p-3 mt-4">
 		<div class="row pb-2">
 			<h2 class="text-primary">Chi tiết hội viên</h2>
@@ -37,7 +37,7 @@
 
 		<div>
 			<label asp-for="UserPicture">Hình ảnh</label>
-			<img src="@Url.Content("~/Images/" + Model.UserPicture)" class="form-control" style="width: 100px; height: 100px" />
+			<img src="@Url.Content("~/Images/" + Model.UserPicture)" class="form-control" style="width: 200px; height: 200px" />
 		</div>
 
 		</div>
@@ -46,3 +46,8 @@
 		Trở lại
 	</a>
 </form>
+<script>
+	function confirmDeleteUser() {
+		return confirm("Bạn có chắc chắn muốn xóa hội viên này???");
+	}
+</script>

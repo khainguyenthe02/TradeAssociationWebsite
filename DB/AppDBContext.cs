@@ -10,5 +10,6 @@ namespace TradeAssociationWebsite.DB
                 : base(options)
         { }
         public DbSet<User> User { get; set; }
+        public DbSet<News> News { get; set; }
     }
 }

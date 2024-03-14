@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Web.Mvc;
 using TradeAssociationWebsite.DB;
+using TradeAssociationWebsite.File;
 using TradeAssociationWebsite.Models.Admin;
 using TradeAssociationWebsite.Repositories.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
@@ -25,13 +28,18 @@ namespace TradeAssociationWebsite.Repositories
 			// Generate a random password
 			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 			var random = new Random();
-			user.Password = new string(Enumerable.Repeat(chars, 8) // Change 8 to the desired length of the password
+			user.Password = new string(Enumerable.Repeat(chars, 6) 
 				.Select(s => s[random.Next(s.Length)]).ToArray());
+
+
 			user.CreatedAt = DateTime.Now;
+
+   //         FileHandle fileHandle = new FileHandle(_webHostEnvironment);
+			//fileHandle.FileUpload(user, userPictureFile);
+
 			// Lưu trữ hình ảnh vào thư mục Images nếu có
 			if (userPictureFile != null && userPictureFile.Length > 0)
 			{
-				//string imagesFolderPath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images");
 				string imagesFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
 				if (!Directory.Exists(imagesFolderPath))
 				{
@@ -43,7 +51,7 @@ namespace TradeAssociationWebsite.Repositories
 
 				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
-				     userPictureFile.CopyToAsync(stream);
+				     userPictureFile.CopyTo(stream);
 				}
 
 				user.UserPicture = uniqueFileName;
@@ -73,8 +81,12 @@ namespace TradeAssociationWebsite.Repositories
 
         public User GetById(int id)
         {
-            var user = _context.User.FirstOrDefault(x => x.Id == id);
-            return user;
+            var user = _context.User.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            if (user != null)
+            {
+				return user;
+			}
+            return new User();
         }
 
         public List<User> Search()
@@ -82,11 +94,40 @@ namespace TradeAssociationWebsite.Repositories
             throw new NotImplementedException();
         }
 
-        public bool Update(User user)
+        public bool Update(User users , IFormFile userPictureFile)
         {
-            throw new NotImplementedException();
-        }
+				// Gán mật khẩu cũ và ảnh cũ nếu không thay đổi hình ảnh của user  
+				string password = users.Password;
+				string userOldPicture = users.UserPicture;
 
+			// Lưu trữ hình ảnh vào thư mục Images nếu có
+			if (userPictureFile != null && userPictureFile.Length > 0)
+			{
+				string imagesFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+				if (!Directory.Exists(imagesFolderPath))
+				{
+					Directory.CreateDirectory(imagesFolderPath);
+				}
+
+				string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(userPictureFile.FileName);
+				string filePath = Path.Combine(imagesFolderPath, uniqueFileName);
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					userPictureFile.CopyTo(stream);
+				}
+				users.UserPicture = uniqueFileName;
+			}
+			else
+			{
+				users.UserPicture = userOldPicture;
+			}
+
+			users.Password = password;
+			_context.User.Update(users);
+			_context.SaveChanges();
+			return true;
+        }
 		
 	}
 }

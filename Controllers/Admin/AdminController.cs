@@ -17,7 +17,7 @@ namespace TradeAssociationWebsite.Controllers.Admin
         [Route("ListOfUser")]
         public IActionResult UserList()
         {
-            var users = _userRepository.GetAll();
+			var users = _userRepository.GetAll();
             if(users != null)
             {
                 return View(users);
@@ -27,25 +27,24 @@ namespace TradeAssociationWebsite.Controllers.Admin
 
 
         // Chi tiết hội viên
-		[HttpGet]
-		[Route("DetailsUser/{id:int}")]
-		public IActionResult DetailsUser(int id)
-        {
-            var user = _userRepository.GetById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
+		//[HttpGet]
+		//[Route("DetailsUser/{id:int}")]
+		//public IActionResult DetailsUser(int id)
+  //      {
+  //          var user = _userRepository.GetById(id);
+  //          if (user == null)
+  //          {
+  //              return NotFound();
+  //          }
+  //          return View(user);
+  //      }
 
 
-        // Cập nhật hội viên
-		[HttpGet]
-		[Route("UpdateUser/{id:int}")]
+
 		public IActionResult UpdateUser(int id)
 		{
 			var user = _userRepository.GetById(id);
+
 			if (user == null)
 			{
 				return NotFound();
@@ -53,9 +52,38 @@ namespace TradeAssociationWebsite.Controllers.Admin
 			return View(user);
 		}
 
+		// Cập nhật hội viên
+		[HttpPost]
+		public IActionResult UpdateUser(User user, IFormFile userPictureFile)
+		{
+			User userResult = _userRepository.GetById((int)user.Id);
+			if(userResult.Password != null)
+			{
+				user.Password = userResult.Password;
+			}
+			try
+			{
+				if (userPictureFile == null)
+				{
+					user.UserPicture = userResult.UserPicture;
+					_userRepository.Update(user, userPictureFile);
+					return RedirectToAction("UserList");
+				}
+				else
+				{	
+					_userRepository.Update(user, userPictureFile);
+					return RedirectToAction("UserList");
+				}
+			}catch (Exception ex)
+			{
+				ModelState.AddModelError("",ex.Message + "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+
+			}
+			return View(user);
+		}
+
 		[HttpGet]
 		[Route("CreateUser")]
-		// Method invoked when pressing the Add New Movie Button
 		public IActionResult CreateUser()
 		{
 			// here we create the model directly inside the view
@@ -73,7 +101,7 @@ namespace TradeAssociationWebsite.Controllers.Admin
 				if (ModelState.IsValid)
 				{
 					_userRepository.Create(user, userPictureFile);
-					return RedirectToAction("ListOfUser");
+					return RedirectToAction("UserList");
 				}
 				return View();
 			}
@@ -82,5 +110,51 @@ namespace TradeAssociationWebsite.Controllers.Admin
 				return BadRequest(ex.Message);
 			}
 		}
+
+		public IActionResult DeleteUser(int id)
+		{
+			if( id == 0)
+			{
+				return BadRequest(id.ToString());
+
+			}
+			else
+			{
+				User user = _userRepository.GetById(id);
+				if (user == null) return NotFound();
+				return View(user);
+			}
+
+			
+		}
+
+		//Xóa hội viên
+		[HttpPost]
+		[Route("DeleteUser/{id:int}")]
+		[ValidateAntiForgeryToken]
+		public IActionResult DeleteUser(int id, User user)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					if (id == 0)
+					{
+						return BadRequest("Id người dùng không hợp lệ");
+					}
+
+					_userRepository.Delete(id);
+					return RedirectToAction("UserList");
+					
+				}
+				return View();
+			}catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		
+
+
 	}
 }

@@ -1,16 +1,15 @@
-﻿
-@model IEnumerable<TradeAssociationWebsite.Models.Admin.User>
+﻿@model IEnumerable<TradeAssociationWebsite.Models.Admin.News>
 @{
-    ViewData["Title"] = "Quản lý hội viên";
+    ViewData["Title"] = "Quản lý tin tức sự kiện";
 }
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Danh sách hội viên</h2>
+            <h2 class="text-primary">Danh sách sự kiện</h2>
         </div>
         <div class="col-6 text-end">
-            <a href="/CreateUser" class="btn btn-primary" >
-                <i class="bi bi-plus-circle"></i> &nbsp; Thêm hội viên
+            <a href="/CreateNews" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> &nbsp; Thêm sự kiện
             </a>
         </div>
     </div>
@@ -20,50 +19,50 @@
         <thead>
             <tr>
                 <th width="20%">
-                    Người dùng
+                    Tiêu đề
                 </th>
                 <th>
-                    Họ tên
+                    Người đăng
                 </th>
                 <th>
-                    Số điện thoại
+                    Ngày đăng
                 </th>
                 <th>
-                    Địa chỉ
+                    Số lượt xem
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var user in Model)
+            @foreach (var news in Model)
             {
                 <tr>
                     <td width="20%">
-                        @user.UserName
+                        @news.Title
                     </td>
                     <td width="15%">
-                        @user.FullName
+                        @news.UserName
                     </td>
                     <td width="15%">
-                        @user.Phone
+                        @news.CreatedAt
                     </td>
-                    <td width="15%">
-                        @user.Address
+                    <td width="15%">                       
+                        @news.ViewCount
                     </td>
                     <td>
                         <div class="w-50 btn-group d-inline" role="group">
-                            <a href="/Admin/UpdateUser/@user.Id"
+                            <a href="/News/UpdateNews/@news.Id"
                                class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i>Sửa
                             </a>
                         </div>
-@*                         <div class="w-50 btn-group d-inline" role="group">
+@*                      <div class="w-50 btn-group d-inline" role="group">
                             <a href="/DetailsUser/@user.Id"
-                               class="btn btn-info mx-2">
+                                class="btn btn-info mx-2">
                                 <i class="bi bi-pencil-square"></i>Chi tiết
                             </a>
                         </div> *@
                         <div class="w-50 btn-group d-inline" role="group">
-                            <a href="/Admin/DeleteUser/@user.Id"
+                            <a href="/News/DeleteNews/@news.Id"
                                class="btn btn-danger mx-2">
                                 <i class="bi bi-trash-fill"></i>Xóa
                             </a>

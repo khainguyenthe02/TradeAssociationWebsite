@@ -12,8 +12,8 @@ namespace TradeAssociationWebsite.Models.Admin
         public string? Phone { get; set; }
         public string? Address { get; set; }
         public string? UserPicture { get; set; }
-        public int? UserType { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public string? UserType { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     }
 }
