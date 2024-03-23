@@ -1,0 +1,73 @@
+﻿@using TradeAssociationWebsite.Models.Admin;
+@model News
+@{
+	ViewData["Title"] = "Cập nhật sự kiện";
+}
+
+<form method="post" asp-controller="News" asp-action="UpdateNews" enctype="multipart/form-data">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Thông tin sự kiện</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Title">Tiêu đề</label>
+			<input asp-for="Title" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Description">Mô tả ngắn gọn</label>
+			<input asp-for="Description" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Contents">Nội dung</label>
+			<textarea asp-for="Contents" class="form-control"></textarea>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Type">Loại sự kiện</label>
+			<input asp-for="Type" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="ImageEvent" name="eventPictureFile">Hình ảnh mới</label>
+			<input asp-for="ImageEvent" id="eventPictureInput" name="eventPictureFile" type="file" class="form-control" onchange="previewImage(event)" />
+		</div>
+		<div id="CurrentImage">
+			<label>Hình ảnh hiện tại</label>
+			<img src="@Url.Content("~/Images/Events/" + Model.ImageEvent)" class="form-control" style="width: 100%; height: 100%" />
+		</div>
+		<div id="imagePreview"></div>
+	</div>
+	<button type="submit" class="btn btn-success" style="width:150px">Lưu</button>
+	<a href="/ListOfNews" class="btn btn-secondary" style="width:150px">
+		Trở lại
+	</a>
+</form>
+<script>
+	function previewImage(event) {
+		var input = event.target;
+		var imageCurrent = document.querySelector("#CurrentImage");
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				if (imageCurrent) {
+					imageCurrent.remove();
+				}
+				var dataURL = e.target.result;
+				var imagePreview = document.getElementById('imagePreview');
+				imagePreview.innerHTML = `<img src="${dataURL}" style="max-width: 100%; max-height: 200px;" />`;
+			};
+
+			reader.onerror = function (e) {
+				console.error('Error reading file:', e.target.error);
+			};
+
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+</script>
+@*add a partial view to do client side validation*@
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

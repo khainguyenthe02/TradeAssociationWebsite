@@ -11,5 +11,6 @@ namespace TradeAssociationWebsite.Repositories.Interfaces
         bool Delete(int id);
         User GetById(int id);
         List<User> Search();
+        User Login(string username, string password);
     }
 }

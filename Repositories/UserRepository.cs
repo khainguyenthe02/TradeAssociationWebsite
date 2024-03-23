@@ -1,23 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Web.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 using TradeAssociationWebsite.DB;
-using TradeAssociationWebsite.File;
 using TradeAssociationWebsite.Models.Admin;
 using TradeAssociationWebsite.Repositories.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
-
+using Microsoft.AspNetCore.Http;
 namespace TradeAssociationWebsite.Repositories
 {
-    public class UserReporitory : IUserRepository
+    public class UserRepository : IUserRepository
     {
         //create dbContext variable
         private readonly AppDBContext _context;
 		private readonly IWebHostEnvironment _webHostEnvironment;
 
-		public UserReporitory(AppDBContext context, IWebHostEnvironment webHostEnvironment)
+		public UserRepository(AppDBContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
 			_webHostEnvironment = webHostEnvironment;
@@ -89,6 +83,16 @@ namespace TradeAssociationWebsite.Repositories
             return new User();
         }
 
+        public User Login(string username, string password)
+        {
+            var userLogin = _context.User.Where(u => u.UserName.Equals(username) && u.Password.Equals(password)).FirstOrDefault();
+			if (userLogin != null)
+			{
+				return userLogin;
+			}
+			return null;
+        }
+
         public List<User> Search()
         {
             throw new NotImplementedException();
@@ -128,6 +132,8 @@ namespace TradeAssociationWebsite.Repositories
 			_context.SaveChanges();
 			return true;
         }
+
+
 		
 	}
 }

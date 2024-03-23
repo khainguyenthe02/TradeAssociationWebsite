@@ -9,11 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 
 // SignUp IRepository and Repository
-builder.Services.AddScoped<IUserRepository, UserReporitory>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
+});
 
 
 // Đọc cấu hình từ appsettings.json
@@ -37,6 +42,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+
+// using session
+app.UseSession();
+
 
 app.UseAuthorization();
 

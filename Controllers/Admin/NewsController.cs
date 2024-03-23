@@ -66,5 +66,54 @@ namespace TradeAssociationWebsite.Controllers.Admin
                 return BadRequest(ex.Message);
             }
         }
-    }
+
+		public IActionResult UpdateNews(int id)
+		{
+			var news = _newsRepository.GetById(id);
+
+			if (news == null)
+			{
+				return NotFound();
+			}
+			return View(news);
+		}
+
+		// Cập nhật hội viên
+		[HttpPost]
+		public IActionResult UpdateNews(News news, IFormFile eventPictureFile)
+		{
+			News userResult = _newsRepository.GetById((int)news.Id);
+			// Fix cứng người đăng tin 
+			if (news.UserId == null)
+			{
+				string username = "Nguyễn Thế Khải";
+				int userId = (int)_userRepository.GetAll()
+							  .Where(user => user.FullName.Equals("Nguyễn Thế Khải"))
+							  .Select(user => user.Id)
+							  .FirstOrDefault();
+				news.UserId = userId;
+				news.UserName = username;
+			}
+			try
+			{
+				if (eventPictureFile == null)
+				{
+					news.ImageEvent = userResult.ImageEvent;
+					_newsRepository.Update(news, eventPictureFile);
+					return RedirectToAction("NewsList");
+				}
+				else
+				{
+					_newsRepository.Update(news, eventPictureFile);
+					return RedirectToAction("NewsList");
+				}
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("", ex.Message + "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+
+			}
+			return View(news);
+		}
+	}
 }

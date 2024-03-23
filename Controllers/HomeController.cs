@@ -15,6 +15,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        var username = Request.Cookies["username"];
+        ViewBag.Username = username;
         return View();
     }
 

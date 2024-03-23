@@ -81,7 +81,7 @@ namespace TradeAssociationWebsite.Repositories
             // Lưu trữ hình ảnh vào thư mục Images nếu có
             if (eventPictureFile != null && eventPictureFile.Length > 0)
             {
-                string imagesFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+                string imagesFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Events");
                 if (!Directory.Exists(imagesFolderPath))
                 {
                     Directory.CreateDirectory(imagesFolderPath);
