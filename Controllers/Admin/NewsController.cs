@@ -115,5 +115,21 @@ namespace TradeAssociationWebsite.Controllers.Admin
 			}
 			return View(news);
 		}
+
+
+        [HttpGet]
+        [Route("News/SearchNewsByTitle")]
+        public IActionResult SearchNewsList( string searchTerm)
+        {
+            var result = _newsRepository.Search(searchTerm);
+            if (result.Count > 0)
+            {
+                return Json(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 	}
 }

@@ -9,6 +9,6 @@ namespace TradeAssociationWebsite.Repositories.Interfaces
         bool Update(News news, IFormFile fromFile);
         bool Delete(int id);
         News GetById(int id);
-        List<News> Search();
+        List<News> Search( string searchTerm);
     }
 }

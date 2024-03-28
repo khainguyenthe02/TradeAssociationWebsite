@@ -70,9 +70,20 @@ namespace TradeAssociationWebsite.Repositories
             return new News();
         }
 
-        public List<News> Search()
+        public List<News> Search(string searchTerm)
         {
-            throw new NotImplementedException();
+            var newsList = new List<News>();
+            //var newsList = _context.SearchNewsByTitle(searchTerm).ToList();
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                newsList = _context.News.ToList();
+            }
+            else
+            {
+                newsList = _context.News.Where(u => u.Title.Contains(searchTerm)).ToList();
+            }
+            
+            return newsList;
         }
 
         public bool Update(News news, IFormFile eventPictureFile)
@@ -105,5 +116,6 @@ namespace TradeAssociationWebsite.Repositories
             _context.SaveChanges();
             return true;
         }
+ 
     }
 }

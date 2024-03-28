@@ -90,3 +90,16 @@ INSERT INTO [dbo].[NEWS]
 			,0
 			,'8b7bad96-0cc2-4a27-a1e6-6bfe22f83bee.jpg')
 	GO
+
+
+CREATE PROCEDURE SearchNewsByTitle
+    @SearchTerm NVARCHAR(MAX)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT * 
+    FROM NEWS
+    WHERE Title LIKE N'%' + @SearchTerm + '%'
+END
+GO
