@@ -70,6 +70,29 @@ namespace TradeAssociationWebsite.Repositories
             return new News();
         }
 
+        public List<News> GetLastNews()
+        {
+            var list = new List<News>();
+            list = _context.GetLastNews().ToList();
+            if (list != null)
+            {
+                return list;
+            }
+            return new List<News>();
+
+        }
+
+        public List<News> GetMostViewedNews()
+        {
+            var list = new List<News>();
+            list = _context.GetMostViewedNews().ToList();
+            if (list != null)
+            {
+                return list;
+            }
+            return new List<News>();
+        }
+
         public List<News> Search(string searchTerm)
         {
             var newsList = new List<News>();
@@ -83,6 +106,20 @@ namespace TradeAssociationWebsite.Repositories
                 newsList = _context.News.Where(u => u.Title.Contains(searchTerm)).ToList();
             }
             
+            return newsList;
+        }
+
+        public List<News> SearchByTitle(string searchTerm)
+        {
+            var newsList= new List<News>(); 
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                newsList =_context.News.ToList();
+            }
+            else
+            {
+                newsList = _context.SearchNewsByTitle(searchTerm).ToList();
+            }
             return newsList;
         }
 
@@ -116,6 +153,23 @@ namespace TradeAssociationWebsite.Repositories
             _context.SaveChanges();
             return true;
         }
- 
+
+        public bool UpdateForViewCount(News news)
+        {
+            try
+            {
+                news.ViewCount += 1;
+                _context.News.Update(news);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+        
     }
 }

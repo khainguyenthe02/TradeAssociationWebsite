@@ -2,16 +2,6 @@
 @{
     ViewData["Title"] = "Quản lý tin tức sự kiện";
 }
-<div class="row">
-    <div class="col-md-6">
-        <!-- Input with Bootstrap -->
-        <input id="searchInput" class="form-control" type="text" placeholder="Tìm kiếm..">
-    </div>
-    <div class="col-md-6">
-        <!-- Button with Bootstrap -->
-        <button id="searchButton" class="btn btn-primary btn-block">Tìm kiếm</button>
-    </div>
-</div>
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
@@ -77,8 +67,8 @@
         </tbody>
     </table>
 </div>
-@section Scripts {
-    <script>
+@* @section Scripts { *@
+    @* <script>
         $(document).ready(function () {
             $('#searchButton').click(function () {
                 var searchTerm = $('#searchInput').val();
@@ -112,6 +102,47 @@
                 });
             });
         });
-    </script>
-}
+    </script> *@
+
+   @*  <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('searchButton').addEventListener('click', function () {
+                var searchTerm = document.getElementById('searchInput').value;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/News/Search?searchTerm=' + searchTerm, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        var tableBody = document.getElementById('TableList').getElementsByTagName('tbody')[0];
+                        tableBody.innerHTML = '';
+                        data.forEach(function (news) {
+                            var newRow = '<tr>' +
+                                '<td width="20%">' + news.title + '</td>' +
+                                '<td width="15%">' + news.userName + '</td>' +
+                                '<td width="15%">' + news.createdAt + '</td>' +
+                                '<td width="15%">' + news.viewCount + '</td>' +
+                                '<td>' +
+                                '<div class="w-50 btn-group d-inline" role="group">' +
+                                '<a href="/News/UpdateNews/' + news.id + '" class="btn btn-primary mx-2">' +
+                                '<i class="bi bi-pencil-square"></i>Sửa</a></div>' +
+                                '<div class="w-50 btn-group d-inline" role="group">' +
+                                '<a href="/News/DeleteNews/' + news.id + '" class="btn btn-danger mx-2">' +
+                                '<i class="bi bi-trash-fill"></i>Xóa</a></div>' +
+                                '</td>' +
+                                '</tr>';
+                            tableBody.insertAdjacentHTML('beforeend', newRow);
+                        });
+                    } else {
+                        console.error(xhr.statusText);
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error('Request failed');
+                };
+                xhr.send();
+            });
+        });
+    </script> *@
+
+@* } *@
 

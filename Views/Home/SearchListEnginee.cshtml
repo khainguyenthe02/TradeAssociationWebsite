@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Tìm kiếm sự kiện - tin tức";
+}
+@model IEnumerable<TradeAssociationWebsite.Models.Admin.News>
+<div class="row" style="margin-top: 10px">
+    <div class="col-md-6">
+        <!-- Input with Bootstrap -->
+        <input id="searchInput" class="form-control" type="text" placeholder="Tìm kiếm..">
+    </div>
+    <div class="col-md-6">
+        <!-- Button with Bootstrap -->
+        <button id="searchButton" class="btn btn-success">Tìm kiếm</button>
+    </div>
+</div>
+<div class="about-area2 gray-bg pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="whats-news-wrapper">
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- card one -->
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div id="TableList" class="row">
+                                   @*  @foreach(var news in Model)
+                                    {
+                                        <div class="col-xl-6 col-lg-6 col-md-6">
+                                            <div class="whats-news-single mb-40 mb-40">
+                                                <div class="whates-img">
+                                                    <img src="@Url.Content("~/Images/Events/" + news.ImageEvent)" alt="">
+                                                </div>
+                                                <div class="whates-caption whates-caption2">
+                                                    <h4>
+                                                        <a href="#">
+                                                            @news.Title
+                                                        </a>
+                                                    </h4>
+                                                    <span>bởi @news.UserName   -   @news.CreatedAt</span>
+                                                    <p>Xem thêm...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    } *@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="pagination" class="mt-3">
+            <ul class="pagination justify-content-center">
+            </ul>
+        </div>
+
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        LoadList(); // Gọi hàm để tải dữ liệu khi trang được load
+    });
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+        var searchTerm = document.getElementById('searchInput').value;
+        LoadList(searchTerm); // Gọi hàm để tải dữ liệu khi người dùng nhấn nút tìm kiếm
+    });
+
+
+
+    function LoadList(searchTerm = '') {
+        var xhr = new XMLHttpRequest();
+        var url = 'SearchListEnginee1';
+        if (searchTerm !== '') {
+            url += '?searchTerm=' + searchTerm;
+        }
+        xhr.open('GET', url, true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                var tableList = document.getElementById('TableList');
+                tableList.innerHTML = ''; // Xóa dữ liệu hiện tại trước khi thêm dữ liệu mới
+                if (data.length > 0) {
+                    data.forEach(function (news) {
+                        var imageUrl = "/Images/Events/" + news.imageEvent;
+                        var newsHtml =
+                            '<div class="col-xl-6 col-lg-6 col-md-6">' +
+                            '<div class="whats-news-single mb-40 mb-40">' +
+                            '<div class="whates-img">' +
+                            '<img style="height: 50vh;object-fit: cover;" class="news-image" src="' + imageUrl + '" alt="">' +
+                            '</div>' +
+                            '<div class="whates-caption whates-caption2">' +
+                            '<h4>' +
+                            '<a href="/Home/NewsDetail/' +news.id+ '">' + news.title + '</a>' +
+                            '</h4>' +
+                            '<span>bởi ' + news.userName + ' - ' + news.createdAt + '</span>' +
+                            '<p>Xem thêm...</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        tableList.insertAdjacentHTML('beforeend', newsHtml);
+                    });
+                } else {
+                    tableList.innerHTML = '<p>Không tìm thấy tin tức phù hợp.</p>';
+                }
+            } else {
+                document.getElementById('TableList').innerHTML = '<p>Có lỗi xảy ra trong quá trình tìm kiếm.</p>';
+            }
+        };
+        xhr.send();
+    }
+</script>

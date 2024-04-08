@@ -103,3 +103,23 @@ BEGIN
     WHERE Title LIKE N'%' + @SearchTerm + '%'
 END
 GO
+
+-- Tin tức mới nhất
+CREATE PROCEDURE GetLastNews
+AS
+BEGIN
+    SELECT TOP 4 *
+    FROM News
+    ORDER BY CreatedAt DESC; 
+END;
+go
+
+-- Tin tức hot nhất
+ CREATE PROCEDURE GetMostViewedNews
+AS
+BEGIN
+    SELECT TOP 2 *
+    FROM News
+    ORDER BY ViewCount DESC; -- Sắp xếp theo lượt xem giảm dần
+END;
+go

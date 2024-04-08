@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TradeAssociationWebsite.Models.Admin;
 
@@ -14,9 +15,26 @@ namespace TradeAssociationWebsite.DB
 
 
         // Proc search
-        public DbSet<News> SearchNewsByTitle(string searchTerm)
+        //public IEnumerable<News> SearchNewsByTitle(string searchTerm)
+        //{
+        //    return News.FromSqlRaw($"EXEC SearchNewsByTitle {searchTerm}").ToList();
+        //}
+
+        public IQueryable<News> SearchNewsByTitle(string searchTerm)
         {
-            return (DbSet<News>)News.FromSqlInterpolated($"EXEC SearchNewsByTitle {searchTerm}");
+            SqlParameter psearchTerm = new SqlParameter("@searchTerm", searchTerm);
+            return this.News.FromSqlRaw("EXECUTE SearchNewsByTitle @searchTerm", psearchTerm);
         }
+
+        public IQueryable<News> GetMostViewedNews()
+        {
+            return this.News.FromSqlRaw("EXECUTE GetMostViewedNews");
+        }
+
+        public IQueryable<News> GetLastNews()
+        {
+            return this.News.FromSqlRaw("EXECUTE GetLastNews");
+        }
+
     }
 }

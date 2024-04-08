@@ -1,13 +1,116 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Hiệp hội Công nghệ Việt Nam";
 }
-<div class="row" >
-    <div class="col-md-6">
-        <!-- Input with Bootstrap -->
-        <input id="searchInput" class="form-control" type="text" placeholder="Tìm kiếm..">
+@model TradeAssociationWebsite.Models.NewsIndexModel
+<section class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                @* @{
+                    if (Model.S
+                    {
+                        <img src="@Url.Content("~/Images/Events/" + news.ImageEvent)" class="card-img" alt="Banner">
+                        <div class="card-body">
+                            <h5 class="card-title">@news.Title</h5>
+                            <p class="card-text">@news.Description</p>
+                            <a href="/News/UpdateNews/@news.Id" class="btn btn-primary">Đọc thêm</a>
+                        </div>
+                    }
+                } *@
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tin tức hot nhất</h5>
+                        <ul class="list-unstyled news-list">
+                            @foreach (var news in Model.MostViewedNews)
+                            {
+                                
+                                <li class="news-item">
+                                    <a href="#" style="text-decoration: none;" >
+                                        <img src="@Url.Content("~/Images/Events/" + news.ImageEvent)" alt="Tin tức 1" class="news-image">
+                                        <h6 style="color:black" class="news-title">@news.Title</h6>
+                                        <p class="news-author">@news.UserName</p>
+                                        <i style="color:darkblue">Lượt xem: @news.ViewCount</i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <!-- Button with Bootstrap -->
-        <button id="searchButton" class="btn btn-primary btn-block">Tìm kiếm</button>
+    @* List tin tức theo chiều ngang *@
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tin tức mới nhất</h5>
+                    <div class="col-12">
+                        <div class="row">
+                            <!-- single -->
+                            @foreach(var news in Model.LatestNews)
+                            {
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-10">
+                                    <div class="whats-right-single mb-20" style="display: flex; align-items: center;">
+                                        <div class="whats-right-img" style="margin-right: 10px;">
+                                            <img style=" height: auto; max-width: 150px;" src="@Url.Content("~/Images/Events/" + news.ImageEvent)" alt="">
+                                        </div>
+                                        <div class="whats-right-cap">
+                                            <span class="colorb">@news.Type</span>
+                                            <h4><a style="text-decoration: none;">@news.Title</a></h4>
+                                            <p>@news.CreatedAt</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <br />
+    
+
+    @* Slide *@
+    <!-- Banner -->
+    <div class="row">
+        <!-- Banner -->
+        <div class="col-md-4">
+
+            <div class="home-banner2 d-none d-lg-block">
+                <img src="~/Images/banner-left.jpg" alt="">
+            </div>
+            <div class="home-banner2 d-none d-lg-block">
+                <img src="~/Images/banner-left-2.jpg" alt="">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h4>Sự kiện nổi bật</h4>
+            <div class="banner">
+                <img id="banner" src="~/Images/Biz-tech-web-2024.jpg" alt="">
+            </div>
+        </div>
+    </div>  
+</section>
+<script>
+    //Banner
+    var i = 0;
+    function chuyenhinh() {
+        var hinh = ["/Images/Biz-tech-web-2024.jpg","/Images/don_vi_tai_tro.png", "/Images/DX-2024-1.jpg", "/Images/ecc.jpg"];
+        document.getElementById('banner').src = hinh[i];
+        i++;
+        if (i > 3) {
+            i = 0;
+        }
+        setTimeout(chuyenhinh, 3 * 1000);
+    }
+    chuyenhinh()
+</script>
+
+

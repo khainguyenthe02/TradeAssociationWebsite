@@ -82,13 +82,14 @@ namespace TradeAssociationWebsite.Controllers.Admin
 		[HttpPost]
 		public IActionResult UpdateNews(News news, IFormFile eventPictureFile)
 		{
-			News userResult = _newsRepository.GetById((int)news.Id);
+            var username = Request.Cookies["username"];
+            News userResult = _newsRepository.GetById((int)news.Id);
 			// Fix cứng người đăng tin 
 			if (news.UserId == null)
 			{
-				string username = "Nguyễn Thế Khải";
+				
 				int userId = (int)_userRepository.GetAll()
-							  .Where(user => user.FullName.Equals("Nguyễn Thế Khải"))
+							  .Where(user => user.UserName.Equals(username))
 							  .Select(user => user.Id)
 							  .FirstOrDefault();
 				news.UserId = userId;
@@ -118,7 +119,7 @@ namespace TradeAssociationWebsite.Controllers.Admin
 
 
         [HttpGet]
-        [Route("News/SearchNewsByTitle")]
+        [Route("News/Search")]
         public IActionResult SearchNewsList( string searchTerm)
         {
             var result = _newsRepository.Search(searchTerm);

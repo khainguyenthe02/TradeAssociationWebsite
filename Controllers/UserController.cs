@@ -47,5 +47,11 @@ namespace TradeAssociationWebsite.Controllers
                 return BadRequest("Vui lòng nhập đầy đủ thông tin");
             }
         }
+        [Route("LogOut")]
+        public IActionResult LogOut()
+        {
+            Response.Cookies.Delete("username");
+            return RedirectToAction("LoginUser", "User");
+        }
     }
 }
