@@ -1,0 +1,78 @@
+﻿@using TradeAssociationWebsite.Models.Admin;
+@model User
+@{
+    ViewData["Title"] = "Thông tin hội viên";
+}
+
+<section class="vh-100" style="background-color: #bcc0c6;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-8 mb-4 mb-lg-0">
+                <div class="card mb-6" style="border-radius: .5rem;">
+                    <div style="--bs-gutter-y: 0; margin-top: 0" class="row g-3">
+                        <div  class="col-md-4 gradient-custom text-center text-white"
+                             style="background: #f6d365;">
+                            <img src="@Url.Content("~/Images/" + Model.UserPicture)"
+                                 alt="Avatar" class="img-fluid my-5" 
+                                 style=" border-radius:50%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);" />
+                            <h5>@Model.FullName</h5>
+                            <p>@Model.UserType</p>
+                            <i class="far fa-edit mb-5"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body p-4">
+                                <a class="btn-info" href="/Admin/UpdateUser/@Model.Id">
+                                    <i class="bi bi-pencil">Chỉnh sửa</i>
+                                </a>
+                                <h6>Thông tin</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row pt-1">
+                                    <div class="col-6 mb-3">
+                                        <h6>Ngày sinh</h6>
+                                        @if (Model.Birthday != null)
+                                        {
+                                            <p class="text-muted">@Model.Birthday.Value.ToString("dd/MM/yyyy")</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">Không có thông tin</p>
+                                        }
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>Số điện thoại</h6>
+                                        <p class="text-muted">@Model.Phone</p>
+                                    </div>
+                                </div>
+                                <h6>Địa chỉ</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row pt-1">     
+                                    <p class="text-muted">@Model.Address</p>
+                                </div>
+                                <h6>Projects</h6>
+                                <hr class="mt-0 mb-4">                                
+                                <div class="row pt-1">
+                                    <div class="col-6 mb-3">
+                                        <h6>Recent</h6>
+                                        <p class="text-muted">Lorem ipsum</p>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>Most Viewed</h6>
+                                        <p class="text-muted">Dolor sit amet</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-start">
+                                    <a href="#!"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                                    <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                                    <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    
+</style>

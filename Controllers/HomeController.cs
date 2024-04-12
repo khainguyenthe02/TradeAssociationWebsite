@@ -8,13 +8,20 @@ namespace TradeAssociationWebsite.Controllers;
 
 public class HomeController : Controller
 {
-
+    public void GetUserName()
+    {
+        GetUserName();
+        //var username = Request.Cookies["username"];
+        //ViewBag.Username = username;
+    }
     private readonly INewsRepository _newsRepository;
     private readonly IUserRepository _userRepository;
-    public HomeController(INewsRepository newsRepository, IUserRepository userRepository)
+    private readonly ICommentRepository _commentRepository;
+    public HomeController(INewsRepository newsRepository, IUserRepository userRepository, ICommentRepository commentRepository)
     {
         _newsRepository = newsRepository;
         _userRepository = userRepository;
+        _commentRepository = commentRepository;
     }
 
     public IActionResult Index()
@@ -42,6 +49,8 @@ public class HomeController : Controller
     [Route("/Home/SearchListEnginee1")]
     public ActionResult SearchListEnginee1(string searchTerm,  int page = 1, int pageSize = 5)
     {
+        var username = Request.Cookies["username"];
+        ViewBag.Username = username;
         var newList = new List<News>();
         newList = _newsRepository.SearchByTitle(searchTerm);
         // Tính toán chỉ mục bắt đầu và chỉ mục kết thúc của phân trang
@@ -64,17 +73,71 @@ public class HomeController : Controller
     [Route("Home/NewsDetail/{newid:int}")]
     public IActionResult NewsDetail(int newid)
     {
-        var news = _newsRepository.GetById(newid);
+        var user = new User();
+        var username = Request.Cookies["username"];
+        if(username == null)
+        {
+            return RedirectToAction("LoginUser", "User");
+        }
+        else
+        {
+            ViewBag.Username = username;
+            user = _userRepository.GetByUserName(username);
+        }        
+        var news = _newsRepository.GetById(newid);        
         if (news != null)
         {
            _newsRepository.UpdateForViewCount(news);
+            var commentsList = _commentRepository.GetCommentsByNews(newid);
             ViewNewsModel newsDetail = new ViewNewsModel{
-                News = news
+                News = news,
+                User = user,
+                CommentList = commentsList            
             };
             return View(newsDetail);
         }
         else { return NotFound(); }
         
+    }
+
+    //Profile User
+    [HttpGet]
+    public IActionResult ProfileDetail(string username)
+    {
+        username = Request.Cookies["username"];
+        ViewBag.Username = username;
+        if (username != null)
+        {
+            User userProfile = _userRepository.GetByUserName(username);
+            return View(userProfile);
+        }
+        else
+        {
+            return RedirectToAction("LoginUser", "User");
+        }
+        
+    }
+
+    [HttpPost]
+    public IActionResult CreateComment(string username, int newsid)
+    {
+        username = Request.Cookies["username"];
+        if (!string.IsNullOrEmpty(username) && newsid > 0)
+        {
+            var userId = _userRepository.GetByUserName(username).Id;
+            Comment comment = new Comment
+            {
+                UserId = userId,
+                NewsId = newsid
+            };
+            _commentRepository.Create(comment);
+            return View("NewsDetail");
+        }
+        else
+        {
+            return RedirectToAction("LoginUser", "User");
+        }
+
     }
 
     public IActionResult Privacy()

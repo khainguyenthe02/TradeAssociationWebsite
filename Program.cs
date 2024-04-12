@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(buil
 // SignUp IRepository and Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

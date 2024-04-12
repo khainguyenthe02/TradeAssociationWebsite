@@ -18,6 +18,7 @@ namespace TradeAssociationWebsite.Repositories
         }
         public void Create(News news, IFormFile eventPictureFile)
         {
+            news.ViewCount = 0;
 
             // Lưu trữ hình ảnh vào thư mục Images nếu có
             if (eventPictureFile != null && eventPictureFile.Length > 0)

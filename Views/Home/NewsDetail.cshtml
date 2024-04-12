@@ -14,12 +14,13 @@
                         <img style="margin-left:5%" class="img-fluid" src="@Url.Content("~/Images/Events/" + Model.News.ImageEvent)" alt="">
                     </div>
                     <div class="blog_details">
+                        
                         <h2>
                             @Model.News.Title
                         </h2>
                         <ul class="blog-info-link mt-3 mb-4">
                             <li><a href="#"><i class="fa fa-user"></i>Số lượt xem : @Model.News.ViewCount</a></li>
-                            <li><a href="#"><i class="fa fa-comment"></i> 03 Comments</a></li>
+                            <li><a href="#"><i class="fa fa-comment"></i>@Model.CommentList.Count</a></li>
                             <li><a href="#">@Model.News.CreatedAt</a></li>
                         </ul>
                         <i>Thể loại: <b>@Model.News.Type</b></i>
@@ -29,51 +30,55 @@
                         </p>
                     </div>
                 </div>
-                <div class="blog-author">
-                    <div class="media align-items-center">
-                        <img src="assets/img/blog/author.png" alt="">
-                        <div class="media-body">
-                            <a href="#">
-                                <h4>@Model.News.UserName</h4>
-                            </a>
-                        </div>
-                    </div>
+                <div class="blog-author" style="padding: 0; margin:0">
+                    <a href="#" style="color:black">
+                     Tác giả:    <h4> @Model.News.UserName</h4>
+                    </a>
                 </div>
 
                 <!-- Comments -->
                 <div class="comments-area">
-                    <h4>05 Comments</h4>
+                    <h4>@Model.CommentList.Count bình luận</h4>
                     <div class="comment-list">
-                        <div class="single-comment justify-content-between d-flex">
-                            <div class="user justify-content-between d-flex">
-                                <div class="thumb">
-                                    <img src="assets/img/comment/comment_1.png" alt="">
-                                </div>
-                                <div class="desc">
-                                    <p class="comment">
-                                        Multiply sea night grass fourth day sea lesser rule open subdue female fill which them
-                                        Blessed, give fill lesser bearing multiply sea night grass fourth day sea lesser
-                                    </p>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <h5>
-                                                <a href="#">Emilly Blunt</a>
-                                            </h5>
-                                            <p class="date">December 4, 2017 at 3:12 pm </p>
+                        
+                        @* Từng comment *@
+                        @foreach( var comment in Model.CommentList)
+                        {
+                            <div class="single-comment justify-content-between d-flex">
+                                <div class="user justify-content-between d-flex">
+                                    @* <div class="thumb">
+                                        <img src="@Url.Content("~/Images/" + )" alt="">
+                                    </div> *@
+                                    <div class="desc">
+                                        <p class="comment">
+                                            @comment.Content
+                                        </p>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <h5>
+                                                    <a href="#">@comment.FullName</a>
+                                                </h5>
+                                                    <p class="date">vào lúc @comment.CreatedAt</p>
+                                            </div>     
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <hr> <!-- Thêm thẻ HR để ngăn cách giữa các comment -->
+                        }                          
+                            @* end Cmt *@
+                        
                     </div>
 
                     <div class="comment-form">
                         <h4>Leave a Reply</h4>
-                        <form class="form-contact comment_form" action="#" id="commentForm">
+                        <form class="form-contact comment_form" method="post" asp-controller="Comment" asp-action="CreateComment" id="commentForm">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9"
+                                        <input type="hidden" name="newsid" value="@Model.News.Id" />
+                                        <textarea class="form-control w-100" name="content" id="comment" cols="30" rows="9"
                                                   placeholder="Write Comment"></textarea>
                                     </div>
                                 </div>
@@ -89,3 +94,4 @@
         </div>
 </section>
 <!--================ Blog Area end =================-->
+

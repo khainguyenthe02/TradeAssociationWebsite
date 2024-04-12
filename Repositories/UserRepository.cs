@@ -83,6 +83,16 @@ namespace TradeAssociationWebsite.Repositories
             return new User();
         }
 
+        public User GetByUserName(string userName)
+        {
+            var user = _context.User.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(userName));
+            if (user != null)
+            {
+                return user;
+            }
+            return new User();
+        }
+
         public User Login(string username, string password)
         {
             var userLogin = _context.User.Where(u => u.UserName.Equals(username) && u.Password.Equals(password)).FirstOrDefault();

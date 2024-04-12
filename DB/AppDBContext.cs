@@ -12,13 +12,7 @@ namespace TradeAssociationWebsite.DB
         { }
         public DbSet<User> User { get; set; }
         public DbSet<News> News { get; set; }
-
-
-        // Proc search
-        //public IEnumerable<News> SearchNewsByTitle(string searchTerm)
-        //{
-        //    return News.FromSqlRaw($"EXEC SearchNewsByTitle {searchTerm}").ToList();
-        //}
+        public DbSet<Comment> Comment { get; set; }
 
         public IQueryable<News> SearchNewsByTitle(string searchTerm)
         {

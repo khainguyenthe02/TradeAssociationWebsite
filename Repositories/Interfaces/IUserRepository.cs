@@ -10,6 +10,7 @@ namespace TradeAssociationWebsite.Repositories.Interfaces
         bool Update(User user, IFormFile fromFile);
         bool Delete(int id);
         User GetById(int id);
+        User GetByUserName(string userName);
         List<User> Search();
         User Login(string username, string password);
     }

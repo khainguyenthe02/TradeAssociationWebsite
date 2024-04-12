@@ -41,16 +41,17 @@ namespace TradeAssociationWebsite.Controllers.Admin
         public IActionResult CreateNews(News news, IFormFile eventPictureFile)
         
         {
-            // Fix cứng người đăng tin 
-            if (news.UserId == null)
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            if (username == null)
             {
-                string username = "Nguyễn Thế Khải";
-                int userId = (int) _userRepository.GetAll()
-                              .Where(user => user.FullName.Equals("Nguyễn Thế Khải")) 
-                              .Select(user => user.Id)
-                              .FirstOrDefault();
-                news.UserId = userId;
-                news.UserName = username;
+                return RedirectToAction("LoginUser", "User");
+            }
+            else
+            {
+                User user = _userRepository.GetByUserName(username);
+                news.UserName = user.FullName;
+                news.UserId = user.Id;
             }
             try
             {
