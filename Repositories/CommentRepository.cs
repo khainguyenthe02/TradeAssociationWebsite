@@ -23,6 +23,28 @@ namespace TradeAssociationWebsite.Repositories
             _context.SaveChanges();
         }
 
+        public bool Delete(int id)
+        {
+            var cmt = _context.Comment.Find(id);
+            if (cmt != null)
+            {
+                _context.Comment.Remove(cmt);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public Comment GetById(int id)
+        {
+            var cmt = _context.Comment.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            if (cmt != null)
+            {
+                return cmt;
+            }
+            return new Comment();
+        }
+
         public List<Comment> GetCommentsByNews(int newsId)
         {
             var comments = _context.Comment.Where(cmt => cmt.NewsId == newsId).ToList();

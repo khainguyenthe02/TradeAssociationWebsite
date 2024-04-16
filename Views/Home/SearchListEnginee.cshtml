@@ -2,6 +2,46 @@
     ViewData["Title"] = "Tìm kiếm sự kiện - tin tức";
 }
 @model IEnumerable<TradeAssociationWebsite.Models.Admin.News>
+<style>
+    .Button {
+      position: relative;
+      border: none;
+      color: #fff;
+      width: 9em;
+      height: 3em;
+      text-align: center;
+      background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+      background-size: 300%;
+      border-radius: 30px;
+      text-transform: uppercase;
+      cursor: pointer;
+      z-index: 1;
+}
+
+.Button:hover {
+  animation: animated 8s linear infinite;
+}
+
+.Button::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 0.5s;
+}
+
+.Button:hover::before {
+  filter: blur(20px);
+}
+
+  100% {
+    background-position: 400%;
+  }
+}
+</style>
 <div class="row" style="margin-top: 10px">
     <div class="col-md-6">
         <!-- Input with Bootstrap -->
@@ -9,7 +49,7 @@
     </div>
     <div class="col-md-6">
         <!-- Button with Bootstrap -->
-        <button id="searchButton" class="btn btn-success">Tìm kiếm</button>
+        <button id="searchButton" class="Button">Tìm kiếm</button>
     </div>
 </div>
 <div class="about-area2 gray-bg pt-60 pb-60">

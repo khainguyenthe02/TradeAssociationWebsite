@@ -20,6 +20,10 @@ namespace TradeAssociationWebsite.DB
             return this.News.FromSqlRaw("EXECUTE SearchNewsByTitle @searchTerm", psearchTerm);
         }
 
+        public IQueryable<News> DeleteNews(int newsId)
+        {
+            return this.News.FromSqlRaw("EXECUTE DeleteNews @newsId", new SqlParameter("@newsId", newsId));
+        }
         public IQueryable<News> GetMostViewedNews()
         {
             return this.News.FromSqlRaw("EXECUTE GetMostViewedNews");

@@ -19,12 +19,36 @@ namespace TradeAssociationWebsite.Controllers.Admin
         [Route("ListOfNews")]
         public IActionResult NewsList()
         {
-            var eventsList = _newsRepository.GetAll();
-            if(eventsList != null)
+            int userId = 0;
+            string userType = string.Empty;
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;         
+            if(username == null)
             {
-                return View(eventsList);
+                return RedirectToAction("LoginUser", "User");
             }
-            return BadRequest("Lỗi") ;
+            else
+            {
+                List<News> eventsList = new List<News>();
+                var user = _userRepository.GetByUserName(username);
+                userId = (int) user.Id;
+                userType = user.UserType;
+                if (userType.Equals("Admin"))
+                {
+                    eventsList = _newsRepository.GetAll();                    
+                }
+                else
+                {
+                    eventsList = _newsRepository.GetAll().Where(x => x.UserId == userId).ToList();
+                }
+                if (eventsList != null)
+                {
+                    return View(eventsList);
+                }
+                return BadRequest("Lỗi");
+
+            }           
+            
         }
         [HttpGet]
         [Route("CreateNews")]
@@ -70,7 +94,9 @@ namespace TradeAssociationWebsite.Controllers.Admin
 
 		public IActionResult UpdateNews(int id)
 		{
-			var news = _newsRepository.GetById(id);
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            var news = _newsRepository.GetById(id);
 
 			if (news == null)
 			{
@@ -79,11 +105,13 @@ namespace TradeAssociationWebsite.Controllers.Admin
 			return View(news);
 		}
 
-		// Cập nhật hội viên
+		// Cập nhật tin tức
 		[HttpPost]
 		public IActionResult UpdateNews(News news, IFormFile eventPictureFile)
 		{
+
             var username = Request.Cookies["username"];
+            ViewBag.Username = username;
             News userResult = _newsRepository.GetById((int)news.Id);
 			// Fix cứng người đăng tin 
 			if (news.UserId == null)
@@ -123,15 +151,58 @@ namespace TradeAssociationWebsite.Controllers.Admin
         [Route("News/Search")]
         public IActionResult SearchNewsList( string searchTerm)
         {
-            var result = _newsRepository.Search(searchTerm);
-            if (result.Count > 0)
+            int userId = 0;
+            string userType = string.Empty;
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            if (username == null)
             {
-                return Json(result);
+                return RedirectToAction("LoginUser", "User");
             }
             else
             {
-                return NotFound();
+                List<News> eventsList = new List<News>();
+                var user = _userRepository.GetByUserName(username);
+                userId = (int)user.Id;
+                userType = user.UserType;
+                var result = _newsRepository.Search(searchTerm);
+                if (userType.Equals("Admin"))
+                {
+                    eventsList = result;
+                }
+                else
+                {
+                    eventsList = result.Where(x => x.UserId == userId).ToList();
+                }
+                
+                if (result.Count > 0)
+                {
+                    return Json(eventsList);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+                
+        }
+        [HttpPost]
+        [Route("/News/DeleteNews/{newsid:int}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult DeleteNews(int newsid)
+        {
+            try
+            {
+                _newsRepository.Delete(newsid);
+                // Trả về một phản hồi JSON cho client
+                return Json(new { success = true, message = "Xóa bài viết thành công" });
+            }
+            catch (Exception ex)
+            {
+                // Trả về một phản hồi JSON với thông báo lỗi nếu có lỗi xảy ra
+                return Json(new { success = false, message = ex.Message });
             }
         }
-	}
+
+    }
 }

@@ -14,10 +14,19 @@ namespace TradeAssociationWebsite.Controllers.Admin
         {
             _userRepository = userRepository;
         }
+
+		public IActionResult Manager()
+		{
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            return View();
+		}
         [Route("ListOfUser")]
         public IActionResult UserList()
         {
-			var users = _userRepository.GetAll();
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            var users = _userRepository.GetAll();
             if(users != null)
             {
                 return View(users);
@@ -43,7 +52,9 @@ namespace TradeAssociationWebsite.Controllers.Admin
 
 		public IActionResult UpdateUser(int id)
 		{
-			var user = _userRepository.GetById(id);
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            var user = _userRepository.GetById(id);
 
 			if (user == null)
 			{
@@ -56,7 +67,9 @@ namespace TradeAssociationWebsite.Controllers.Admin
 		[HttpPost]
 		public IActionResult UpdateUser(User user, IFormFile userPictureFile)
 		{
-			User userResult = _userRepository.GetById((int)user.Id);
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            User userResult = _userRepository.GetById((int)user.Id);
 			if(userResult.Password != null)
 			{
 				user.Password = userResult.Password;
@@ -86,8 +99,10 @@ namespace TradeAssociationWebsite.Controllers.Admin
 		[Route("CreateUser")]
 		public IActionResult CreateUser()
 		{
-			// here we create the model directly inside the view
-			return View("CreateUser");
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
+            // here we create the model directly inside the view
+            return View("CreateUser");
 		}
 
 		// Thêm mới hội viên

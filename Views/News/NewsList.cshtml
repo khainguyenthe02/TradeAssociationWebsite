@@ -2,6 +2,57 @@
 @{
     ViewData["Title"] = "Quản lý tin tức sự kiện";
 }
+<style>
+    .btn {
+        padding: 20px;        
+    }
+
+
+    .Button, .btn {
+        position: relative;
+        border: none;
+        color: #fff;
+        height: 2em;
+        text-align: center;
+        background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+        background-size: 300%;
+        border-radius: 30px;
+        text-transform: uppercase;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+        .Button:hover, .btn:hover {
+            animation: animated 8s linear infinite;
+        }
+
+        .Button::before, .btn:before {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            z-index: -1;
+            background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+            background-size: 400%;
+            border-radius: 35px;
+            transition: 0.5s;
+        }
+
+        .Button:hover::before, .btn:hover::before {
+            filter: blur(20px);
+        }
+
+    }
+</style>
+<div class="row" style="margin-top: 10px">
+    <div class="col-md-6">
+        <!-- Input with Bootstrap -->
+        <input id="searchInput" class="form-control" type="text" placeholder="Tìm kiếm..">
+    </div>
+    <div class="col-md-6">
+        <!-- Button with Bootstrap -->
+        <button id="searchButton" class="Button">Tìm kiếm</button>
+    </div>
+</div>
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
@@ -35,7 +86,7 @@
         <tbody>
              @foreach (var news in Model)
             {
-                <tr>
+                <tr id="@news.Id">
                     <td width="20%">
                         @news.Title
                     </td>
@@ -56,10 +107,10 @@
                             </a>
                         </div> 
                         <div class="w-50 btn-group d-inline" role="group">
-                            <a href="/News/DeleteNews/@news.Id"
+                            <button type="submit" onclick="deleteNews(@news.Id)"
                                class="btn btn-danger mx-2">
                                 <i class="bi bi-trash-fill"></i>Xóa
-                            </a>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -67,45 +118,10 @@
         </tbody>
     </table>
 </div>
-@* @section Scripts { *@
-    @* <script>
-        $(document).ready(function () {
-            $('#searchButton').click(function () {
-                var searchTerm = $('#searchInput').val();
-                $.ajax({
-                    url: '/News/SearchNewsByTitle',
-                    type: 'GET',
-                    data: { searchTerm: searchTerm },
-                    success: function (data) {
-                        // Xóa dữ liệu hiện tại trong tbody
-                        $('#TableList tbody').empty();
-                        console.log(data);
-                        // Đổ dữ liệu từ JSON nhận được vào tbody
-                        $.each(data, function (index, news) {
-                            var newRow = '<tr>' +
-                                '<td width="20%">' + news.title + '</td>' +
-                                '<td width="15%">' + news.userName + '</td>' +
-                                '<td width="15%">' + news.createdAt + '</td>' +
-                                '<td width="15%">' + news.viewCount + '</td>' +
-                                '<td>' +
-                                '<div class="w-50 btn-group d-inline" role="group">' +
-                                '<a href="/News/UpdateNews/' + news.id + '" class="btn btn-primary mx-2">' +
-                                '<i class="bi bi-pencil-square"></i>Sửa</a></div>' +
-                                '<div class="w-50 btn-group d-inline" role="group">' +
-                                '<a href="/News/DeleteNews/' + news.id + '" class="btn btn-danger mx-2">' +
-                                '<i class="bi bi-trash-fill"></i>Xóa</a></div>' +
-                                '</td>' +
-                                '</tr>';
-                            $('#TableList tbody').append(newRow);
-                        });
-                    }
-                });
-            });
-        });
-    </script> *@
 
-   @*  <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Tìm kiếm ajax dùng js thuần
             document.getElementById('searchButton').addEventListener('click', function () {
                 var searchTerm = document.getElementById('searchInput').value;
                 var xhr = new XMLHttpRequest();
@@ -116,7 +132,7 @@
                         var tableBody = document.getElementById('TableList').getElementsByTagName('tbody')[0];
                         tableBody.innerHTML = '';
                         data.forEach(function (news) {
-                            var newRow = '<tr>' +
+                            var newRow = '<tr id="' + news.id +'">' +
                                 '<td width="20%">' + news.title + '</td>' +
                                 '<td width="15%">' + news.userName + '</td>' +
                                 '<td width="15%">' + news.createdAt + '</td>' +
@@ -126,7 +142,7 @@
                                 '<a href="/News/UpdateNews/' + news.id + '" class="btn btn-primary mx-2">' +
                                 '<i class="bi bi-pencil-square"></i>Sửa</a></div>' +
                                 '<div class="w-50 btn-group d-inline" role="group">' +
-                                '<a href="/News/DeleteNews/' + news.id + '" class="btn btn-danger mx-2">' +
+                            '<button type="submit" onclick="deleteNews(' + news.id + ')" class="btn btn - danger mx - 2">' +
                                 '<i class="bi bi-trash-fill"></i>Xóa</a></div>' +
                                 '</td>' +
                                 '</tr>';
@@ -141,8 +157,69 @@
                 };
                 xhr.send();
             });
+
+        
         });
-    </script> *@
 
-@* } *@
+        // Hàm xóa bài viết bằng ajax
+        // function deleteNews(newsid) {
+        //     // Xác nhận với người dùng trước khi xóa
+        //     if (confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+        //         var xhr = new XMLHttpRequest();
+        //         xhr.open('POST', '/News/DeleteNews/'+ newsid, true);
+        //         xhr.setRequestHeader('Content-Type', 'application/json');
+        //         xhr.onload = function () {
+        //             if (xhr.status === 200) {
+        //                 var response = JSON.parse(xhr.responseText);
+        //                 if (response.success) {
+        //                     alert(response.message);
+        //                     var element = document.getElementById(newsid);
+        //                     element.parentNode.removeChild(element);
+        //                 } else {
+        //                     // Hiển thị thông báo lỗi
+        //                     alert('Lỗi: ' + response.message);
+        //                 }
+        //             } else {
+        //                 console.error(xhr.statusText);
+        //             }
+        //         };
+        //         xhr.onerror = function () {
+        //             console.error('Request failed');
+        //         };
+        //         // Gửi dữ liệu id của bài viết cần xóa dưới dạng JSON
+        //         xhr.send(JSON.stringify({ id: newsid }));
+        //     }
+        //}
+    function deleteNews(newsid) {
+        if (confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/News/DeleteNews/' + newsid, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert(response.message);
+                            var element = document.getElementById(newsid);
+                            if (element) {
+                                element.parentNode.removeChild(element);
+                            }
+                        } else {
+                            // Hiển thị thông báo lỗi
+                            alert('Lỗi: ' + response.message);
+                        }
+                    } else {
+                        console.error(xhr.statusText);
+                    }
+                }
+            };
+            xhr.onerror = function () {
+                console.error('Request failed');
+            };
+            // Gửi dữ liệu id của bài viết cần xóa dưới dạng JSON
+            xhr.send(JSON.stringify({ id: newsid }));
+        }
+    }
 
+</script>

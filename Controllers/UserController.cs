@@ -15,7 +15,7 @@ namespace TradeAssociationWebsite.Controllers
         [Route("LoginUser")]
         public IActionResult LoginUser()
         {
-            return View("LoginUser");
+            return View();
         }
         public IActionResult Login(string username, string password)
         {
@@ -35,7 +35,15 @@ namespace TradeAssociationWebsite.Controllers
                         HttpOnly = true
                     };
                     Response.Cookies.Append("username", username, cookieOptions);
-                    return RedirectToAction("Index", "Home");
+                    if(user.UserType.Equals("Admin"))
+                    {
+                        return RedirectToAction("Manager", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
                 }
                 else
                 {

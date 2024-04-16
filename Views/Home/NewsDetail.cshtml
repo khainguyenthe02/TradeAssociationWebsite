@@ -3,7 +3,22 @@
 @{
     ViewData["Title"] = "Chi tiết bài viết";
 }
+<style>
+    #spanDel
+    {
+        float: right;
+        color: black;        
+        cursor: pointer;
+        font-weight: bold;
+    }
+    #spanDel:hover{
+        color: red;
+        cursor: pointer;
+        background-color:beige;
+        padding:2px;
+    }
 
+</style>
 <!--================Blog Area =================-->
 <section class="blog_area single-post-area section-padding" style="padding-top:10px">
     <div class="container">
@@ -44,11 +59,8 @@
                         @* Từng comment *@
                         @foreach( var comment in Model.CommentList)
                         {
-                            <div class="single-comment justify-content-between d-flex">
+                           @*  <div class="single-comment justify-content-between d-flex">
                                 <div class="user justify-content-between d-flex">
-                                    @* <div class="thumb">
-                                        <img src="@Url.Content("~/Images/" + )" alt="">
-                                    </div> *@
                                     <div class="desc">
                                         <p class="comment">
                                             @comment.Content
@@ -64,8 +76,35 @@
                                         
                                     </div>
                                 </div>
+                            </div> *@
+                            <div class="container">
+                                <div id="@comment.Id" style="margin-bottom: 20px" class="single-comment justify-content-between d-flex">
+                                    <div class="user justify-content-between d-flex">
+                                        <div class="desc">
+                                            <h5 class="comment">
+                                                @comment.Content
+                                            </h5>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <h6>
+                                                        <a href="#">@comment.FullName</a>
+                                                    </h6>
+                                                    <p class="date">vào lúc @comment.CreatedAt</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Thêm biểu tượng xóa -->
+                                    <button type="submit" id="spanDel" onclick="deleteComment(@comment.Id)">
+                                        <i class="bi bi-trash-fill"></i> Xóa
+                                    </button>
+
+                                </div>
                             </div>
-                            <hr> <!-- Thêm thẻ HR để ngăn cách giữa các comment -->
+                            
+
+                            
                         }                          
                             @* end Cmt *@
                         
@@ -91,7 +130,43 @@
                 </div>
 
             </div>
+            
         </div>
+    </div>
+    <script>
+        function deleteComment(cmtid) {
+            if (confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/Comment/DeleteComment/' + cmtid, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                alert(response.message);
+                                var element = document.getElementById(cmtid);
+                                if (element) {
+                                    element.parentNode.removeChild(element);
+                                }
+                            } else {
+                                // Hiển thị thông báo lỗi
+                                alert('Lỗi: ' + response.message);
+                            }
+                        } else {
+                            console.error(xhr.statusText);
+                        }
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error('Request failed');
+                };
+                // Gửi dữ liệu id của bài viết cần xóa dưới dạng JSON
+                xhr.send(JSON.stringify({ id: cmtid }));
+            }
+        }
+
+    </script>
 </section>
-<!--================ Blog Area end =================-->
+
 

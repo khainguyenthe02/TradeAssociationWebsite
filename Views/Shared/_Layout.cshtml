@@ -12,6 +12,10 @@
     <style>
         body {
             font-family: "Barlow", sans-serif;
+            
+        }
+        header{
+            background-color:cadetblue;
         }
         .row{
             margin-top: 10px;
@@ -80,46 +84,44 @@
    
     
 </head>
-<body>
+<body style="background-color:aliceblue;">
 
-    <header>
+    <header style="">
         <!-- Navbar -->
-        <div class="topnav" style="position: relative; z-index: 1000;">
-            <a class="active" href="Home/Index">Home</a>          
-            <a href="https://drive.google.com/file/d/1hf6gIS3us4xcaili0Fs-oyb8OBRqcPL3/view">Giới thiệu</a>
-            <a href="">Điều lệ</a>
-            <a href="#contact">Liên hệ</a>
-            <a href="/Home/SearchListEnginee">Tin tức</a>
+        <div class="topnav" style="position: relative; z-index: 1000;background:cadetblue;">
+            <a style="text-align:center" class="active" href="Index">Home</a>          
+            <a style="text-align:center" href="https://drive.google.com/file/d/1hf6gIS3us4xcaili0Fs-oyb8OBRqcPL3/view">Giới thiệu</a>
+            <a style="text-align:center" href="">Điều lệ</a>
+            <a style="text-align:center" href="#contact">Liên hệ</a>
+            <a style="text-align:center" href="/Home/SearchListEnginee">Tin tức</a>
             @if (!string.IsNullOrEmpty(ViewBag.Username))
             {
-                <div style="float:right">
-                    <a href="Home/ProfileDetail">Xin chào @ViewBag.Username</a>
-                    <a href="/LogOut">Đăng xuất</a>
-                </div>
+                @* <div style="float:right"> *@
+                <a style="text-align:center" href="/Home/ProfileDetail">Xin chào @ViewBag.Username</a>
+                <a style="text-align:center" href="/LogOut">Đăng xuất</a>
+                @* </div> *@
                 
             }
             else
             {
-                <a  style=" float:right" href="/LoginUser">Bạn chưa đăng nhập? Đăng nhập ngay.</a>
+                <a style="text-align:center" href="/LoginUser">Bạn chưa đăng nhập? Đăng nhập ngay.</a>
             }
             
         </div>
         <!-- Navbar -->
     </header>
     <div class="container" style="position: relative; z-index: 0">
-
-        <main role="main" class="pb-3">
-           
+        <main role="main" class="pb-3">          
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer style="position: relative" class="border-top footer text-muted">
         <div class="container">
             © 2024 Hiệp Hội Công nghệ Việt Nam. <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <a  id="scrollUp" href="#top" style="position: fixed; display: block;"><i class="ti-arrow-up"></i></a>
+    <a id="scrollUp" href="#top" style="position: fixed; display: block;">⬆</a>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

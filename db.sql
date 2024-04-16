@@ -104,6 +104,17 @@ BEGIN
 END
 GO
 
+-- Xóa tin tức
+CREATE PROCEDURE DeleteNews
+    @newsId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DELETE FROM NEWS
+    WHERE Id = @newsId;
+END;
+GO
 -- Tin tức mới nhất
 CREATE PROCEDURE GetLastNews
 AS
