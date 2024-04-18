@@ -162,3 +162,57 @@ GO
 ALTER TABLE [dbo].[COMMENT] CHECK CONSTRAINT [FK_COMMENT_USER]
 GO
 
+--CREATE TABLE [dbo].[NewsStatus](
+--    [NewsId] [int] NOT NULL, -- Khóa ngoại đến bảng News
+--    [IsEnabled] [bit] NOT NULL DEFAULT 1,
+--    [UpdatedAt] [datetime] NOT NULL DEFAULT GETDATE(),
+--    CONSTRAINT [FK_NewsStatus_News] FOREIGN KEY ([NewsId]) REFERENCES [dbo].[News]([Id])
+--)
+--<!-- Checkbox để cho admin chọn trạng thái của sản phẩm -->
+--<td>
+--    <input type="checkbox" id="newsStatusCheckbox_@news.Id" @(news.IsEnabled ? "checked" : "") onchange="toggleNewsStatus(@news.Id)">
+--    <label for="newsStatusCheckbox_@news.Id">Enable/Disable</label>
+--</td>
+
+--[HttpPost]
+--public IActionResult ToggleNewsStatus(int newsId, bool isEnabled)
+--{
+--    try
+--    {
+--        var news = _newsRepository.GetNewsById(newsId);
+--        if (news == null)
+--        {
+--            return NotFound(); // Trả về mã lỗi 404 nếu không tìm thấy sự kiện
+--        }
+
+--        // Chuyển đổi trạng thái của sự kiện
+--        news.IsEnabled = !news.IsEnabled;
+--        _newsRepository.UpdateNews(news);
+
+--        return Ok(); // Trả về mã thành công 200 nếu cập nhật thành công
+--    }
+--    catch (Exception ex)
+--    {
+--        return BadRequest(ex.Message); // Trả về mã lỗi 400 nếu có lỗi xảy ra
+--    }
+--}
+
+
+--<script>
+--    function toggleNewsStatus(newsId) {
+--        var checkbox = document.getElementById("newsStatusCheckbox_" + newsId);
+--        var isEnabled = checkbox.checked;
+
+--        // Gửi yêu cầu AJAX để cập nhật trạng thái của sự kiện
+--        var xhr = new XMLHttpRequest();
+--        xhr.open("POST", "/News/ToggleNewsStatus?newsId=" + newsId + "&isEnabled=" + isEnabled, true);
+--        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+--        xhr.onreadystatechange = function () {
+--            if (xhr.readyState == 4 && xhr.status == 200) {
+--                // Xử lý kết quả nếu cần
+--                console.log(xhr.responseText);
+--            }
+--        };
+--        xhr.send();
+--    }
+--</script>

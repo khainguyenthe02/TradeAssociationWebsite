@@ -54,6 +54,8 @@ namespace TradeAssociationWebsite.Controllers.Admin
         [Route("CreateNews")]
         public IActionResult CreateNews()
         {
+            var username = Request.Cookies["username"];
+            ViewBag.Username = username;
             // here we create the model directly inside the view
             return View("CreateNews");
         }
@@ -112,21 +114,15 @@ namespace TradeAssociationWebsite.Controllers.Admin
 
             var username = Request.Cookies["username"];
             ViewBag.Username = username;
-            News userResult = _newsRepository.GetById((int)news.Id);
-			// Fix cứng người đăng tin 
-			if (news.UserId == null)
-			{
-				
-				int userId = (int)_userRepository.GetAll()
-							  .Where(user => user.UserName.Equals(username))
-							  .Select(user => user.Id)
-							  .FirstOrDefault();
-				news.UserId = userId;
-				news.UserName = username;
-			}
+            
 			try
 			{
-				if (eventPictureFile == null)
+                News userResult = _newsRepository.GetById((int)news.Id);
+                news.UserId = userResult.UserId;
+                news.UserName = userResult.UserName;
+                news.ViewCount = userResult.ViewCount;
+                
+                if (eventPictureFile == null)
 				{
 					news.ImageEvent = userResult.ImageEvent;
 					_newsRepository.Update(news, eventPictureFile);

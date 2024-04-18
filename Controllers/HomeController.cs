@@ -43,24 +43,26 @@ public class HomeController : Controller
     [Route("/Home/SearchListEnginee")]
     public IActionResult SearchListEnginee(string searchTerm)
     {
+        var username = Request.Cookies["username"];
+        ViewBag.Username = username;
         return View("SearchListEnginee");
     }
     [HttpGet]
     [Route("/Home/SearchListEnginee1")]
-    public ActionResult SearchListEnginee1(string searchTerm,  int page = 1, int pageSize = 5)
+    public ActionResult SearchListEnginee1(string searchTerm)
     {
         var username = Request.Cookies["username"];
         ViewBag.Username = username;
         var newList = new List<News>();
         newList = _newsRepository.SearchByTitle(searchTerm);
         // Tính toán chỉ mục bắt đầu và chỉ mục kết thúc của phân trang
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = startIndex + pageSize;
+        //int startIndex = (page - 1) * pageSize;
+        //int endIndex = startIndex + pageSize;
         // Lấy ra danh sách tin tức cho trang hiện tại
-        var pagedNewsList = newList.Skip(startIndex).Take(pageSize).ToList();
-        if (pagedNewsList.Count > 0)
+        //var pagedNewsList = newList.Skip(startIndex).Take(pageSize).ToList();
+        if (newList.Count > 0)
         {
-            return Json(pagedNewsList);
+            return Json(newList);
         }
         else
         {

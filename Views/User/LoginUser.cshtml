@@ -57,6 +57,17 @@
             }
             return false;
         }
+        // Kiểm tra mật khẩu có chứa ít nhất một chữ cái, một số và một kí tự đặc biệt
+        // var passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$!%*?&])[A-Za-z\d$!%*?&]+$/;
+        // if (!passwordRegex.test(password.value)) {
+        //     error.innerHTML = "Mật khẩu phải chứa ít nhất một chữ cái, một số và một kí tự đặc biệt";
+        //     error.style.display = "block";
+        //     if (event) {
+        //         event.preventDefault(); // Ngăn chặn gửi form
+        //     }
+        //     return false;
+        // }
+        
         // Nếu không có lỗi, cho phép gửi form
         return true;
     }

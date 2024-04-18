@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Cập nhật sự kiện";
 }
 
-<form method="post" asp-controller="News" asp-action="UpdateNews" enctype="multipart/form-data">
+<form method="post" asp-controller="News" onsubmit="return validate()" asp-action="UpdateNews" enctype="multipart/form-data">
 	<div class="border p-3 mt-4">
 		<div class="row pb-2">
 			<h2 class="text-primary">Thông tin sự kiện</h2>
@@ -68,6 +68,6 @@
 @*add a partial view to do client side validation*@
 @section Scripts {
 	@{
-		<partial name="_ValidationScriptsPartial" />
+						<partial name="_ValidationScriptsPartial" />
 	}
 }
